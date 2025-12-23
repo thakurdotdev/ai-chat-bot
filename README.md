@@ -17,7 +17,7 @@ A production-quality AI live chat agent web application for e-commerce customer 
 | ---------- | -------------------------------- |
 | Frontend   | Vite + React 19 + TypeScript     |
 | Styling    | Tailwind CSS + shadcn/ui         |
-| Backend    | Node.js + Express 5 + TypeScript |
+| Backend    | Node.js + Express 4 + TypeScript |
 | Database   | PostgreSQL + Drizzle ORM         |
 | Cache      | Redis (optional)                 |
 | LLM        | Gemini + OpenAI (selectable)     |
