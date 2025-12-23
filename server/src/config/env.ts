@@ -15,6 +15,8 @@ const envSchema = z
     DATABASE_URL: z.url(),
     REDIS_URL: z.url().optional(),
 
+    FRONTEND_URL: z.url(),
+
     // LLM Configuration
     LLM_PROVIDER: z.enum(LLM_PROVIDERS).default("gemini"),
     GEMINI_API_KEY: z.string().optional(),

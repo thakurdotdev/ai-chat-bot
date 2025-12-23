@@ -2,11 +2,12 @@ import cors from "cors";
 import express from "express";
 import { errorMiddleware } from "./middleware/error.middleware";
 import chatRoutes from "./routes/chat.routes";
+import { env } from "./config/env";
 
 export function createApp() {
   const app = express();
 
-  app.use(cors());
+  app.use(cors({ origin: env.FRONTEND_URL }));
   app.use(express.json({ limit: "50kb" }));
 
   app.get("/health", (_req, res) => {

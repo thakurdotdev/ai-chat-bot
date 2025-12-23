@@ -71,6 +71,7 @@ Create `server/.env`:
 ```env
 PORT=4000
 NODE_ENV=development
+FRONTEND_URL=http://localhost:5173
 DATABASE_URL=postgresql://user:password@localhost:5432/ai_chat
 
 # LLM Configuration (pick one provider)
