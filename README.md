@@ -201,6 +201,16 @@ The AI is configured as "TechStyle Electronics" support agent with:
 - **Domain Knowledge** - Shipping, returns, support hours, product categories
 - **Behavioral Guidelines** - Concise answers, admitting limitations
 - **Context Window** - Last 10 messages for conversation continuity
+- **Cost Control** - Conversation history is capped to the most recent 10 messages and responses use conservative token limits to avoid unnecessary LLM spend
+
+### Failure Modes
+
+| Scenario                        | Behavior                                  |
+| ------------------------------- | ----------------------------------------- |
+| Redis unavailable               | Caching and rate limiting bypassed safely |
+| Primary LLM rate-limited        | Fallback provider used if configured      |
+| All LLM providers fail          | Friendly fallback message returned        |
+| Any external dependency failure | Server continues running, no crashes      |
 
 ## Error Handling
 
@@ -233,3 +243,11 @@ If Redis is unavailable or `REDIS_URL` is not set:
 - App continues with DB-only mode
 - No crashes or errors
 - Rate limiting is bypassed
+
+## Future Improvements
+
+- Streaming responses (SSE)
+- RAG with embeddings for dynamic FAQs
+- Admin dashboard for conversation monitoring
+- WhatsApp / Instagram channel adapters using the same service layer
+- DB-based FAQ/domain knowledge for multi-tenant support
