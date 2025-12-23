@@ -6,6 +6,7 @@ const SESSION_STORAGE_KEY = "chat_session_id";
 interface UseChatReturn {
   messages: ChatMessage[];
   isLoading: boolean;
+  isRestoring: boolean;
   error: string | null;
   sendMessage: (content: string) => Promise<void>;
   clearError: () => void;
@@ -17,6 +18,7 @@ export function useChat(): UseChatReturn {
     return localStorage.getItem(SESSION_STORAGE_KEY);
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Fetch history on mount if sessionId exists
@@ -24,6 +26,7 @@ export function useChat(): UseChatReturn {
     const storedId = localStorage.getItem(SESSION_STORAGE_KEY);
     if (!storedId) return;
 
+    setIsRestoring(true);
     chatApi
       .getHistory(storedId)
       .then((history) => {
@@ -36,6 +39,9 @@ export function useChat(): UseChatReturn {
       })
       .catch((err) => {
         console.error("Failed to restore chat history:", err);
+      })
+      .finally(() => {
+        setIsRestoring(false);
       });
   }, []);
 
@@ -89,6 +95,7 @@ export function useChat(): UseChatReturn {
   return {
     messages,
     isLoading,
+    isRestoring,
     error,
     sendMessage,
     clearError,

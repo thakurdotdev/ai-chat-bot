@@ -1,11 +1,12 @@
 import { ChatInput } from "@/components/ChatInput";
 import { ChatMessage } from "@/components/ChatMessage";
 import { useChat } from "@/hooks/useChat";
-import { ChevronLeft, MoreHorizontal, X } from "lucide-react";
+import { ChevronLeft, Loader2, MoreHorizontal, X } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 
 export function ChatContainer() {
-  const { messages, isLoading, error, sendMessage, clearError } = useChat();
+  const { messages, isLoading, isRestoring, error, sendMessage, clearError } =
+    useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const shouldAutoScrollRef = useRef(true);
@@ -81,7 +82,18 @@ export function ChatContainer() {
         onScroll={handleScroll}
         className="flex-1 overflow-y-auto px-4 py-4"
       >
-        {messages.length === 0 && !isLoading && (
+        {/* Restoring chat history loader */}
+        {isRestoring && (
+          <div className="h-full flex flex-col items-center justify-center text-center px-4">
+            <Loader2 className="w-6 h-6 text-gray-400 animate-spin mb-3" />
+            <div className="text-gray-400 text-sm">
+              Loading previous messages...
+            </div>
+          </div>
+        )}
+
+        {/* Empty state with quick actions */}
+        {!isRestoring && messages.length === 0 && !isLoading && (
           <div className="h-full flex flex-col items-center justify-center text-center px-4">
             <div className="text-gray-400 text-sm mb-4">No messages yet</div>
             <div className="flex flex-wrap justify-center gap-2">
@@ -138,7 +150,7 @@ export function ChatContainer() {
       )}
 
       {/* Input */}
-      <ChatInput onSend={sendMessage} isLoading={isLoading} />
+      <ChatInput onSend={sendMessage} isLoading={isLoading || isRestoring} />
     </div>
   );
 }
